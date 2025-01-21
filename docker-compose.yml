@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  database:
+    image: postgres
+    restart: always
+    container_name: pedicure-db
+    ports:
+      - 58310:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pedicure
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+
+  redis:
+    image: redis
+    restart: always
+    container_name: pedicure-redis
+    ports:
+      - 6379:6379
+
+volumes:
+  postgres:
