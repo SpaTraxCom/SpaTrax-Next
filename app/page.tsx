@@ -2,6 +2,9 @@ import { getClient } from "@/lib/redis/index";
 import { getDb } from "@/lib/db";
 import { usersTable } from "@/lib/db/schema";
 
+import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/mode-toggle";
+
 export default async function Home() {
   const redis = await getClient();
   const db = await getDb();
@@ -26,5 +29,10 @@ export default async function Home() {
   await getUsers();
   console.log(users);
 
-  return <div>Hello, world!</div>;
+  return (
+    <div>
+      <Button>Click me</Button>
+      <ModeToggle />
+    </div>
+  );
 }
