@@ -1,3 +1,5 @@
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+
 import { getClient } from "@/lib/redis/index";
 import { getDb } from "@/lib/db";
 import { usersTable } from "@/lib/db/schema";
@@ -33,6 +35,12 @@ export default async function Home() {
     <div>
       <Button>Click me</Button>
       <ModeToggle />
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
     </div>
   );
 }
