@@ -35,12 +35,6 @@ export default async function Home() {
     <div>
       <Button>Click me</Button>
       <ModeToggle />
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
     </div>
   );
 }
