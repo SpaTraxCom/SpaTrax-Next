@@ -1,6 +1,9 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
-import { WebhookEvent } from "@clerk/nextjs/server";
+import { UserJSON, WebhookEvent } from "@clerk/nextjs/server";
+
+import { getDb } from "@/lib/db";
+import { usersTable } from "@/lib/db/schema";
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.CLERK_SIGNING_SECRET;
@@ -27,6 +30,9 @@ export async function POST(req: Request) {
     });
   }
 
+  // Get DB instance
+  const db = await getDb();
+
   // Get body
   const payload = await req.json();
   const body = JSON.stringify(payload);
@@ -47,11 +53,16 @@ export async function POST(req: Request) {
     });
   }
 
-  const { id } = evt.data;
   const eventType = evt.type;
 
   if (eventType === "user.created") {
-    // TODO: Add user to database
+    const data = evt.data as UserJSON;
+
+    const user = await db.insert(usersTable).values({
+      first_name: data.first_name || "",
+      last_name: data.last_name || "",
+      email: data.email_addresses[0].email_address,
+    });
   }
 
   return new Response("Webhook received", { status: 200 });

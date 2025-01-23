@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { SignedIn, SignedOut, UserProfile } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function Header() {
@@ -10,9 +10,9 @@ export default function Header() {
           <span className="text-primary font-bold">Spa</span>Trax
         </h1>
       </Link>
-      <div className="">
+      <div>
         <SignedIn>
-          <UserProfile />
+          <UserButton />
         </SignedIn>
         <SignedOut>
           <div className="space-x-4">
