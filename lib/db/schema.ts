@@ -9,7 +9,10 @@ import {
 export const usersTable = pgTable("users", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   created_at: timestamp("created_at").notNull().defaultNow(),
-  updated_at: timestamp("updated_at").notNull().defaultNow(),
+  updated_at: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
   first_name: varchar({ length: 255 }).notNull(),
   last_name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
