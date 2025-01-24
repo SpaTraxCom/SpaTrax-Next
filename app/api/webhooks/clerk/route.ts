@@ -1,9 +1,13 @@
+import "dotenv/config";
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { UserJSON, WebhookEvent } from "@clerk/nextjs/server";
+import { Resend } from "resend";
 
 import { getDb } from "@/lib/db";
 import { usersTable } from "@/lib/db/schema";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.CLERK_SIGNING_SECRET;
@@ -58,11 +62,32 @@ export async function POST(req: Request) {
   if (eventType === "user.created") {
     const data = evt.data as UserJSON;
 
-    const user = await db.insert(usersTable).values({
-      first_name: data.first_name || "",
-      last_name: data.last_name || "",
-      email: data.email_addresses[0].email_address,
-    });
+    // Create user in database
+    try {
+      const user = await db.insert(usersTable).values({
+        first_name: data.first_name || "",
+        last_name: data.last_name || "",
+        email: data.email_addresses[0].email_address,
+      });
+    } catch (err) {
+      console.log(err);
+      return new Response("Error creating user in database", { status: 500 });
+    }
+
+    // Send welcome email
+    try {
+      const email = await resend.emails.send({
+        from: "SpaTrax <noreply@spatrax.com>",
+        to: data.email_addresses[0].email_address,
+        subject: "Welcome to SpaTrax!",
+        html: "<p>Welcome to <strong>SpaTrax</strong>! Your go to solution for pedicure logging and more.</p>",
+      });
+
+      console.log(email);
+    } catch (err) {
+      console.log(err);
+      return new Response("Error sending welcome email", { status: 500 });
+    }
   }
 
   return new Response("Webhook received", { status: 200 });
