@@ -30,9 +30,7 @@ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -73,7 +71,7 @@ export default function CreateLogForm(props: Props) {
     if (props.technician?.esignature) setSignatureSet(true);
   }, []);
 
-  let now = new Date();
+  const now = new Date();
   now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
 
   // 1. Define your form.
@@ -133,7 +131,7 @@ export default function CreateLogForm(props: Props) {
     if (!tech) return;
 
     try {
-      const updatedMember = await editTeamMemberSignatureAction({
+      await editTeamMemberSignatureAction({
         id: tech.id,
         esignature: sig,
       });

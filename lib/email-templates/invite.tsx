@@ -1,16 +1,13 @@
 import {
   Body,
   Button,
-  Column,
   Container,
   Head,
   Heading,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
-  Row,
   Section,
   Tailwind,
   Text,
@@ -24,10 +21,6 @@ interface VercelInviteUserEmailProps {
   teamName?: string;
   inviteLink?: string;
 }
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
 
 export const SpaTraxInviteUserEmail = ({
   username,
@@ -45,15 +38,7 @@ export const SpaTraxInviteUserEmail = ({
       <Tailwind>
         <Body className="bg-white my-auto mx-auto font-sans px-2">
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] max-w-[465px]">
-            <Section className="mt-[32px]">
-              {/* <Img
-                src={`${baseUrl}/static/vercel-logo.png`}
-                width="40"
-                height="37"
-                alt="Vercel"
-                className="my-0 mx-auto"
-              /> */}
-            </Section>
+            <Section className="mt-[32px]"></Section>
             <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
               Join <strong>{teamName}</strong> on <strong>SpaTrax</strong>
             </Heading>
@@ -90,8 +75,8 @@ export const SpaTraxInviteUserEmail = ({
               This invitation was intended for{" "}
               <span className="text-black">{username}</span>. If you were not
               expecting this invitation, you can ignore this email. If you are
-              concerned about your account's safety, please reply to this email
-              to get in touch with us.
+              concerned about your account&apos;s safety, please reply to this
+              email to get in touch with us.
             </Text>
           </Container>
         </Body>

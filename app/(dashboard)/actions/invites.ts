@@ -90,6 +90,8 @@ export async function sendInviteEmailAction(invite: {
         inviteLink: `http://localhost:3000/sign-up?inviteId=${invite.inviteId}`,
       }),
     });
+
+    return email;
   } catch (err) {
     console.log(err);
     return new Response("Error sending welcome email", { status: 500 });

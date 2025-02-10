@@ -112,7 +112,7 @@ export async function POST(req: Request) {
 
     // Send welcome email
     try {
-      const email = await resend.emails.send({
+      await resend.emails.send({
         from: "SpaTrax <noreply@spatrax.com>",
         to: user[0].email,
         subject: "Welcome to SpaTrax!",

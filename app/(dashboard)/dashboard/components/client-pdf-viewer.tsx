@@ -2,7 +2,6 @@
 
 import { establishmentsTable, logsTable, usersTable } from "@/lib/db/schema";
 import {
-  PDFDownloadLink,
   Document,
   Page,
   Text,

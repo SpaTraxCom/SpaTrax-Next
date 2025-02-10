@@ -27,9 +27,7 @@ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -62,7 +60,7 @@ export default function CreateUserForm(props: Props) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
-  let now = new Date();
+  const now = new Date();
   now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
 
   // 1. Define your form.

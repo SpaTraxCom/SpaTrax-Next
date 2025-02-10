@@ -16,7 +16,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -30,6 +29,7 @@ export default async function LogsPage({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  // @ts-ignore
   let { userId, dateStart, dateEnd } = await searchParams;
 
   let startDate = new Date(Date.now()).setUTCHours(0, 0, 0, 0);
