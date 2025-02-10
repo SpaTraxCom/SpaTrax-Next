@@ -26,8 +26,12 @@ import ClientLogsExport from "../components/client-logs-export";
 
 type tParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-export default async function LogsPage({ params }: { params: tParams }) {
-  const { userId, dateStart, dateEnd } = await params;
+export default async function LogsPage({
+  searchParams,
+}: {
+  searchParams: tParams;
+}) {
+  const { userId, dateStart, dateEnd } = await searchParams;
 
   let startDate = new Date(Date.now()).setUTCHours(0, 0, 0, 0);
   let endDate = new Date(Date.now()).setUTCHours(23, 59, 59, 999);

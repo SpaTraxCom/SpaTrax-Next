@@ -3,8 +3,12 @@ import { SignUp } from "@clerk/nextjs";
 
 type tParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-export default async function Page({ params }: { params: tParams }) {
-  const { inviteId } = await params;
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: tParams;
+}) {
+  const { inviteId } = await searchParams;
   let invite;
 
   if (inviteId) {
