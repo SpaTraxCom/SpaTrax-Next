@@ -1,5 +1,6 @@
 "use server";
 
+import "dotenv/config";
 import { Resend } from "resend";
 import { eq, InferSelectModel } from "drizzle-orm";
 
@@ -87,7 +88,9 @@ export async function sendInviteEmailAction(invite: {
           : "Admin",
         invitedByEmail: user.email,
         teamName: establishment.business_name,
-        inviteLink: `http://localhost:3000/sign-up?inviteId=${invite.inviteId}`,
+        inviteLink: process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}/sign-up?inviteId=${invite.inviteId}`
+          : `http://localhost:3000/sign-up?inviteId=${invite.inviteId}`,
       }),
     });
 
