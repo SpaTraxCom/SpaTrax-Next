@@ -1,4 +1,4 @@
-import Header from "../(landing)/components/header";
+import Header from "@/app/(landing)/components/header";
 
 export default function AuthLayout({
   children,
@@ -8,7 +8,7 @@ export default function AuthLayout({
   return (
     <div>
       <Header />
-      <div className="grid place-items-center mt-10">{children}</div>
+      {children}
     </div>
   );
 }

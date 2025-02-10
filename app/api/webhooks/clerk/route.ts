@@ -5,7 +5,10 @@ import { UserJSON, WebhookEvent } from "@clerk/nextjs/server";
 import { Resend } from "resend";
 
 import { getDb } from "@/lib/db";
-import { usersTable } from "@/lib/db/schema";
+import { invitesTable, usersTable } from "@/lib/db/schema";
+
+import WelcomeEmail from "@/lib/email-templates/welcome";
+import { eq } from "drizzle-orm";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -61,31 +64,62 @@ export async function POST(req: Request) {
 
   if (eventType === "user.created") {
     const data = evt.data as UserJSON;
+    let user;
 
-    // Create user in database
-    try {
-      const user = await db.insert(usersTable).values({
-        first_name: data.first_name || "",
-        last_name: data.last_name || "",
-        email: data.email_addresses[0].email_address,
-      });
-    } catch (err) {
-      console.log(err);
-      return new Response("Error creating user in database", { status: 500 });
+    if (data.unsafe_metadata.inviteId) {
+      // Grab invite from database
+      const invites = await db
+        .select()
+        .from(invitesTable)
+        .where(eq(invitesTable.id, +data.unsafe_metadata.inviteId));
+
+      if (!invites[0])
+        return new Response("Error retrieving invite", { status: 500 });
+
+      // Add clerk ID to existing database user
+      user = await db
+        .update(usersTable)
+        .set({
+          clerk_id: data.id,
+        })
+        .where(eq(usersTable.id, invites[0].user_id))
+        .returning();
+
+      // Set invite as accepted
+      await db
+        .update(invitesTable)
+        .set({
+          accepted: true,
+        })
+        .where(eq(invitesTable.id, invites[0].id));
+    } else {
+      // Create user in database
+      try {
+        user = await db
+          .insert(usersTable)
+          .values({
+            first_name: data.first_name || "",
+            last_name: data.last_name || "",
+            email: data.email_addresses[0].email_address,
+            clerk_id: data.id,
+          })
+          .returning();
+      } catch (e) {
+        console.log(e);
+        return new Response("Error creating user in database", { status: 500 });
+      }
     }
 
     // Send welcome email
     try {
       const email = await resend.emails.send({
         from: "SpaTrax <noreply@spatrax.com>",
-        to: data.email_addresses[0].email_address,
+        to: user[0].email,
         subject: "Welcome to SpaTrax!",
-        html: "<p>Welcome to <strong>SpaTrax</strong>! Your go to solution for pedicure logging and more.</p>",
+        react: WelcomeEmail({ userFirstname: user[0].first_name || "Friend" }),
       });
-
-      console.log(email);
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      console.log(e);
       return new Response("Error sending welcome email", { status: 500 });
     }
   }

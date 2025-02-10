@@ -12,7 +12,12 @@ export default function Header() {
       </Link>
       <div>
         <SignedIn>
-          <UserButton />
+          <div className="flex space-x-4 items-center">
+            <Link href={"dashboard"}>
+              <Button>Dashboard</Button>
+            </Link>
+            <UserButton />
+          </div>
         </SignedIn>
         <SignedOut>
           <div className="space-x-4">
