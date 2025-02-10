@@ -27,7 +27,7 @@ export default function SigPad(props: Props) {
     return () => {
       signaturePadRef.current?.off();
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function saveSignature() {
     if (!signaturePadRef.current) return;

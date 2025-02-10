@@ -67,7 +67,7 @@ export function SettingsForm(props: Props) {
 
   useEffect(() => {
     setPresets(props.establishment.presets || []);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({

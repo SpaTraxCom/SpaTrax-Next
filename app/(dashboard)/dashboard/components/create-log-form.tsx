@@ -69,7 +69,7 @@ export default function CreateLogForm(props: Props) {
 
   useEffect(() => {
     if (props.technician?.esignature) setSignatureSet(true);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const now = new Date();
   now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -118,7 +118,7 @@ export default function CreateLogForm(props: Props) {
   }
 
   function setTimeToNow() {
-    let now = new Date();
+    const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     form.setValue("performed_at", now.toISOString().slice(0, 16));
   }

@@ -53,7 +53,9 @@ export async function getTeamMemberAction(id: number) {
     if (rTeam) {
       const parsedTeam = JSON.parse(rTeam);
 
-      const member = parsedTeam.find((member: any) => member.id === id);
+      const member = parsedTeam.find(
+        (member: InferSelectModel<typeof usersTable>) => member.id === id
+      );
 
       if (member) return member;
     }
@@ -114,7 +116,9 @@ export async function createTeamMemberAction(member: {
     );
     const rTeam = await redis.get(`team:${user.establishment_id}`);
     if (rTeam) {
-      const parsedRTeam = JSON.parse(rTeam) as any[];
+      const parsedRTeam = JSON.parse(rTeam) as InferSelectModel<
+        typeof usersTable
+      >[];
       if (parsedRTeam.length) {
         parsedRTeam.push(createdMembers[0]);
       }
@@ -169,9 +173,11 @@ export async function editTeamMemberAction(member: {
     // Update Redis "team:"
     const rTeam = await redis.get(`team:${updatedMember[0].establishment_id}`);
     if (rTeam) {
-      const team: any[] = JSON.parse(rTeam);
+      const team: InferSelectModel<typeof usersTable>[] = JSON.parse(rTeam);
 
-      const index = team.findIndex((m: any) => m.id === updatedMember[0].id);
+      const index = team.findIndex(
+        (m: InferSelectModel<typeof usersTable>) => m.id === updatedMember[0].id
+      );
 
       if (index !== -1) {
         team[index] = updatedMember[0];
@@ -223,9 +229,11 @@ export async function editTeamMemberSignatureAction({
     // Update Redis "team:"
     const rTeam = await redis.get(`team:${updatedMember[0].establishment_id}`);
     if (rTeam) {
-      const team: any[] = JSON.parse(rTeam);
+      const team: InferSelectModel<typeof usersTable>[] = JSON.parse(rTeam);
 
-      const index = team.findIndex((m: any) => m.id === updatedMember[0].id);
+      const index = team.findIndex(
+        (m: InferSelectModel<typeof usersTable>) => m.id === updatedMember[0].id
+      );
 
       if (index !== -1) {
         team[index] = updatedMember[0];

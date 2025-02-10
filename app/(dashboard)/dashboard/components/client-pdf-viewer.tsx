@@ -106,7 +106,7 @@ export default function ClientPDFViewer(props: Props) {
               </Text>
               <Text style={styles.col3}>{row.chair}</Text>
               <Text style={styles.col4}>
-                <Image style={styles.signature} src={row.esignature || ""} />
+                <Image style={styles.signature} src={row.esignature || ""} />{" "}
               </Text>
               <Text style={styles.col5}>{row.presets?.join(", ")}</Text>
             </View>

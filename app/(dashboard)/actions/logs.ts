@@ -163,7 +163,10 @@ export async function createLogAction(log: {
     // Add to Redis
     const rLogs = await redis.get(`logs:${user.establishment_id}`);
     if (rLogs) {
-      const parsedRLogs = JSON.parse(rLogs) as any[];
+      const parsedRLogs = JSON.parse(rLogs) as InferSelectModel<
+        typeof logsTable
+      > &
+        { user: InferSelectModel<typeof usersTable> }[];
       // We only store the 10 most recent logs in Redis
       if (parsedRLogs.length >= 10) {
         parsedRLogs.shift();
