@@ -24,12 +24,10 @@ import { LogsTable } from "@/app/(dashboard)/dashboard/components/logs-table";
 import ClientPDFViewer from "@/app/(dashboard)/dashboard/components/client-pdf-viewer";
 import ClientLogsExport from "../components/client-logs-export";
 
-export default async function LogsPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const { userId, dateStart, dateEnd } = await searchParams;
+type tParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function LogsPage({ params }: { params: tParams }) {
+  const { userId, dateStart, dateEnd } = await params;
 
   let startDate = new Date(Date.now()).setUTCHours(0, 0, 0, 0);
   let endDate = new Date(Date.now()).setUTCHours(23, 59, 59, 999);

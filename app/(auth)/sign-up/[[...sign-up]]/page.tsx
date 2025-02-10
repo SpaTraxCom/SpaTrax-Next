@@ -1,12 +1,10 @@
 import { getInviteAction } from "@/app/(dashboard)/actions/invites";
 import { SignUp } from "@clerk/nextjs";
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const { inviteId } = await searchParams;
+type tParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function Page({ params }: { params: tParams }) {
+  const { inviteId } = await params;
   let invite;
 
   if (inviteId) {

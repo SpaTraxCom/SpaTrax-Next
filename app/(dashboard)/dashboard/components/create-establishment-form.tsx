@@ -96,6 +96,7 @@ export default function CreateEstablishmentForm() {
         postal: values.postal,
         country: values.country,
         chairs: values.chairs,
+        presets: ["After Client", "End of Day", "Weekly"],
       });
 
       if (establishment) {
