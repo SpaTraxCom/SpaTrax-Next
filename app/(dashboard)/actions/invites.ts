@@ -89,7 +89,7 @@ export async function sendInviteEmailAction(invite: {
         invitedByEmail: user.email,
         teamName: establishment.business_name,
         inviteLink: process.env.VERCEL_URL
-          ? `https://${process.env.VERCEL_URL}/sign-up?inviteId=${invite.inviteId}`
+          ? `https://www.spatrax.com/sign-up?inviteId=${invite.inviteId}`
           : `http://localhost:3000/sign-up?inviteId=${invite.inviteId}`,
       }),
     });

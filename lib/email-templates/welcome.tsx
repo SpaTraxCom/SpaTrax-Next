@@ -16,7 +16,7 @@ interface WelcomeEmailProps {
 }
 
 const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
+  ? `https://www.spatrax.com`
   : "localhost:3000";
 
 export const WelcomeEmail = ({ userFirstname }: WelcomeEmailProps) => (
