@@ -1,3 +1,4 @@
+import "dotenv/config";
 import type { RedisClientType } from "@redis/client";
 import { createClient } from "redis";
 
@@ -11,7 +12,9 @@ let client: RedisClientType;
 
 async function getClient() {
   if (!client) {
-    client = createClient();
+    client = createClient({
+      url: process.env.REDIS_URL || "redis://localhost:6379",
+    });
     client.on("error", (err) => console.log("Redis Client Error", err));
     await client.connect();
   }
