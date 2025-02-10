@@ -109,7 +109,7 @@ export async function createEstablishmentAction(establishment: {
     );
 
     // Update User in Redis
-    await redis.set(`users:${user[0].clerk_id}`, JSON.stringify(user));
+    await redis.set(`users:${user[0].clerk_id}`, JSON.stringify(user[0]));
 
     return createdEstablishment[0];
   } catch (e) {
