@@ -7,8 +7,16 @@ import { getUserAction } from "@/app/(dashboard)/actions/users";
 import { TeamTable } from "@/app/(dashboard)/dashboard/components/team-table";
 
 export default async function TeamPage() {
-  const user = await getUserAction();
-  const team = await getTeamAction();
+  let user;
+  let team;
+
+  try {
+    user = await getUserAction();
+    team = await getTeamAction();
+  } catch (e) {
+    console.log(`[Error]: ${e}`);
+    return <h1>Error</h1>;
+  }
 
   if (!user || user.role === "employee") return <h1>Unauthorized</h1>;
 

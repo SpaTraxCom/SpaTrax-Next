@@ -10,11 +10,11 @@ import { usersTable } from "@/lib/db/schema";
 export async function getUserAction(): Promise<
   InferSelectModel<typeof usersTable> | undefined
 > {
-  const { userId } = await auth();
-  const db = await getDb();
-  const redis = await getClient();
-
   try {
+    const { userId } = await auth();
+    const db = await getDb();
+    const redis = await getClient();
+
     // Attempt to grab user from Redis
     const rUser = await redis.get(`users:${userId}`);
     if (rUser) {
@@ -30,7 +30,7 @@ export async function getUserAction(): Promise<
     await redis.set(`users:${userId}`, JSON.stringify(users[0]));
     return users[0];
   } catch (e) {
-    console.log(e);
+    console.log(`[Error]: ${e}`);
     return undefined;
   }
 }

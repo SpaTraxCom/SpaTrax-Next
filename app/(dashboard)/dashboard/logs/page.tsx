@@ -41,8 +41,17 @@ export default async function LogsPage({
   if (dateEnd)
     endDate = new Date(dateEnd as string).setUTCHours(23, 59, 59, 999);
 
-  const user = await getUserAction();
-  const establishment = await getEstablishmentAction();
+  let user;
+  let establishment;
+
+  try {
+    user = await getUserAction();
+    establishment = await getEstablishmentAction();
+  } catch (e) {
+    console.log(`[Error]: ${e}`);
+    return <h1>Error</h1>;
+  }
+
   let logs;
   let team;
 
@@ -62,18 +71,33 @@ export default async function LogsPage({
     // Grab all logs
     if (!userId && !dateStart && !dateEnd) {
       // If no search queries specified grab all
-      logs = await getLogsAction();
+      try {
+        logs = await getLogsAction();
+      } catch (e) {
+        console.log(`[Error]: ${e}`);
+        return <h1>Error</h1>;
+      }
     } else {
       // Otherwise use search queries
-      logs = await searchLogsAction({
-        userId: userId ? +userId : user.id,
-        dateStart: new Date(startDate),
-        dateEnd: new Date(endDate),
-      });
+      try {
+        logs = await searchLogsAction({
+          userId: userId ? +userId : user.id,
+          dateStart: new Date(startDate),
+          dateEnd: new Date(endDate),
+        });
+      } catch (e) {
+        console.log(`[Error]: ${e}`);
+        return <h1>Error</h1>;
+      }
     }
 
     // Grab team
-    team = await getTeamAction();
+    try {
+      team = await getTeamAction();
+    } catch (e) {
+      console.log(`[Error]: ${e}`);
+      return <h1>Error</h1>;
+    }
   }
 
   if (!team) return <h1>An error has occured</h1>;

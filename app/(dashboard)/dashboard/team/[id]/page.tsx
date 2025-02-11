@@ -9,13 +9,20 @@ export default async function EditTeamMemberPage({
   params: Promise<{ id: string }>;
 }) {
   const id = (await params).id;
-
   if (!id) return <h1>User not found</h1>;
 
-  const user = await getTeamMemberAction(+id);
-  const establishment = await getEstablishmentAction();
+  let user;
+  let establishment;
 
-  if (!establishment) return <h1>Error</h1>;
+  try {
+    user = await getTeamMemberAction(+id);
+    establishment = await getEstablishmentAction();
+  } catch (e) {
+    console.log(`[Error]: ${e}`);
+    return <h1>Error</h1>;
+  }
+
+  if (!establishment || !user) return <h1>Error</h1>;
 
   return (
     <div>

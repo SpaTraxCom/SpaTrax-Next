@@ -12,14 +12,14 @@ import { revalidatePath } from "next/cache";
 export async function getTeamAction(): Promise<
   InferSelectModel<typeof usersTable>[] | undefined
 > {
-  const user = await getUserAction();
-
-  if (!user || !user.establishment_id) return [];
-
-  const db = await getDb();
-  const redis = await getClient();
-
   try {
+    const user = await getUserAction();
+
+    if (!user || !user.establishment_id) return [];
+
+    const db = await getDb();
+    const redis = await getClient();
+
     // Attempt to grab team from Redis
     const rTeam = await redis.get(`team:${user.establishment_id}`);
     if (rTeam) {
@@ -35,19 +35,19 @@ export async function getTeamAction(): Promise<
     await redis.set(`team:${user.establishment_id}`, JSON.stringify(team));
     return team;
   } catch (e) {
-    console.log(e);
+    console.log(`[Error]: ${e}`);
   }
 }
 
 export async function getTeamMemberAction(id: number) {
-  const user = await getUserAction();
-
-  if (!user || !user.establishment_id) return [];
-
-  const db = await getDb();
-  const redis = await getClient();
-
   try {
+    const user = await getUserAction();
+
+    if (!user || !user.establishment_id) return [];
+
+    const db = await getDb();
+    const redis = await getClient();
+
     // Attempt to grab team member from Redis
     const rTeam = await redis.get(`team:${user.establishment_id}`);
     if (rTeam) {
@@ -68,7 +68,7 @@ export async function getTeamMemberAction(id: number) {
 
     return team;
   } catch (e) {
-    console.log(e);
+    console.log(`[Error]: ${e}`);
   }
 }
 
@@ -130,7 +130,7 @@ export async function createTeamMemberAction(member: {
 
     return createdMembers[0];
   } catch (e) {
-    console.log(e);
+    console.log(`[Error]: ${e}`);
     return undefined;
   }
 }
@@ -144,10 +144,10 @@ export async function editTeamMemberAction(member: {
   chair: string;
   esignature?: string;
 }) {
-  const db = await getDb();
-  const redis = await getClient();
-
   try {
+    const db = await getDb();
+    const redis = await getClient();
+
     const user = await getUserAction();
     if (!user || user.role === "employee") throw new Error("Unauthorized");
 
@@ -193,7 +193,7 @@ export async function editTeamMemberAction(member: {
 
     return updatedMember;
   } catch (e) {
-    console.log(e);
+    console.log(`[Error]: ${e}`);
   }
 }
 
@@ -204,10 +204,10 @@ export async function editTeamMemberSignatureAction({
   id: number;
   esignature: string;
 }) {
-  const db = await getDb();
-  const redis = await getClient();
-
   try {
+    const db = await getDb();
+    const redis = await getClient();
+
     const user = await getUserAction();
     if (!user || (user.role === "employee" && user.id !== id))
       throw new Error("Unauthorized");
@@ -249,6 +249,6 @@ export async function editTeamMemberSignatureAction({
 
     return updatedMember;
   } catch (e) {
-    console.log(e);
+    console.log(`[Error]: ${e}`);
   }
 }

@@ -9,12 +9,21 @@ import { getEstablishmentAction } from "@/app/(dashboard)/actions/establishments
 import { Button } from "@/components/ui/button";
 import CreateLogForm from "@/app/(dashboard)/dashboard/components/create-log-form";
 import { LogsTable } from "@/app/(dashboard)/dashboard/components/logs-table";
+import { InferSelectModel } from "drizzle-orm";
+import { establishmentsTable, logsTable, usersTable } from "@/lib/db/schema";
 
 export default async function Dashboard() {
   await connection();
 
   const date = new Date();
-  const user = await getUserAction();
+  let user;
+
+  try {
+    user = await getUserAction();
+  } catch (e) {
+    console.log(`[Error]: ${e}`);
+    return <h1>Error</h1>;
+  }
 
   if (!user)
     return (
@@ -32,9 +41,33 @@ export default async function Dashboard() {
       </div>
     );
 
-  const team = await getTeamAction();
-  const logs = await getLogsAction();
-  const establishment = await getEstablishmentAction(user);
+  let team: InferSelectModel<typeof usersTable>[];
+  let logs: (InferSelectModel<typeof logsTable> & {
+    user: InferSelectModel<typeof usersTable>;
+  })[];
+  let establishment: InferSelectModel<typeof establishmentsTable>;
+
+  try {
+    // TODO: Make a function to get all this in one call?
+    const teamPromise = getTeamAction();
+    const logsPromise = getLogsAction();
+    const establishmentPromise = getEstablishmentAction(user);
+
+    const [vTeam, vLogs, vEstablishment] = await Promise.all([
+      teamPromise,
+      logsPromise,
+      establishmentPromise,
+    ]);
+
+    if (!vTeam || !vLogs || !vEstablishment) return <h1>Error</h1>;
+
+    team = vTeam;
+    logs = vLogs;
+    establishment = vEstablishment;
+  } catch (e) {
+    console.log(`[Error]: ${e}`);
+    return <h1>Error</h1>;
+  }
 
   return (
     <div className="mt-8">

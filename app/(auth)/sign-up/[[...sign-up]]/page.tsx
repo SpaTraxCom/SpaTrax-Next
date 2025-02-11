@@ -12,7 +12,11 @@ export default async function Page({
   let invite;
 
   if (inviteId) {
-    invite = await getInviteAction(+inviteId);
+    try {
+      invite = await getInviteAction(+inviteId);
+    } catch (e) {
+      console.log(`[Error]: ${e}`);
+    }
   }
 
   if (invite && invite.accepted)

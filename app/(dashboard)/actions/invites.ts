@@ -35,14 +35,14 @@ export async function createInviteAction(
   inviteUserId: number,
   inviteUserEmail: string
 ): Promise<InferSelectModel<typeof invitesTable> | undefined> {
-  const user = await getUserAction();
-
-  if (!user || user.role === "employee" || !user.establishment_id)
-    throw new Error("Unauthorized");
-
-  const db = await getDb();
-
   try {
+    const user = await getUserAction();
+
+    if (!user || user.role === "employee" || !user.establishment_id)
+      throw new Error("Unauthorized");
+
+    const db = await getDb();
+
     const createdInvites = await db
       .insert(invitesTable)
       .values({
@@ -54,7 +54,7 @@ export async function createInviteAction(
 
     return createdInvites[0];
   } catch (e) {
-    console.log(e);
+    console.log(`[Error]: ${e}`);
     return undefined;
   }
 }
@@ -65,16 +65,16 @@ export async function sendInviteEmailAction(invite: {
   invitedEmail: string;
   inviteId: number;
 }) {
-  const user = await getUserAction();
-
-  if (!user || user.role === "employee" || !user.establishment_id)
-    throw new Error("Unauthorized");
-
-  const establishment = await getEstablishmentAction(user);
-
-  if (!establishment) throw new Error("Unauthorized");
-
   try {
+    const user = await getUserAction();
+
+    if (!user || user.role === "employee" || !user.establishment_id)
+      throw new Error("Unauthorized");
+
+    const establishment = await getEstablishmentAction(user);
+
+    if (!establishment) throw new Error("Unauthorized");
+
     const email = await resend.emails.send({
       from: "SpaTrax <noreply@spatrax.com>",
       to: invite.invitedEmail,

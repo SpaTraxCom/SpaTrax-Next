@@ -3,12 +3,19 @@ import { getUserAction } from "@/app/(dashboard)/actions/users";
 import { getEstablishmentAction } from "@/app/(dashboard)/actions/establishments";
 
 export default async function SettingsPage() {
-  const user = await getUserAction();
+  let user;
+  let establishment;
+
+  try {
+    user = await getUserAction();
+
+    establishment = await getEstablishmentAction();
+  } catch (e) {
+    console.log(`[Error]: ${e}`);
+    return <h1>Error</h1>;
+  }
 
   if (!user || user.role !== "admin") return <h1>Unauthorized</h1>;
-
-  const establishment = await getEstablishmentAction();
-
   if (!establishment) return <h1>Unauthorized</h1>;
 
   return (

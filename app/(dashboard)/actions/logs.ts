@@ -16,14 +16,14 @@ export async function getLogsAction(): Promise<
     })[]
   | undefined
 > {
-  const user = await getUserAction();
-
-  if (!user || !user.establishment_id) return [];
-
-  const db = await getDb();
-  const redis = await getClient();
-
   try {
+    const user = await getUserAction();
+
+    if (!user || !user.establishment_id) return [];
+
+    const db = await getDb();
+    const redis = await getClient();
+
     // Attempt to grab user from Redis
     const rLogs = await redis.get(`logs:${user.establishment_id}`);
     if (rLogs) {
@@ -51,7 +51,7 @@ export async function getLogsAction(): Promise<
     );
     return mappedLogs;
   } catch (e) {
-    console.log(e);
+    console.log(`[Error]: ${e}`);
   }
 }
 
@@ -109,7 +109,7 @@ export async function searchLogsAction(search: {
 
     return mappedLogs;
   } catch (e) {
-    console.log(e);
+    console.log(`[Error]: ${e}`);
   }
 }
 
@@ -119,21 +119,21 @@ export async function createLogAction(log: {
   user_id: number;
   presets: string[];
 }): Promise<InferSelectModel<typeof logsTable> | undefined> {
-  const user = await getUserAction();
-
-  if (!user) throw new Error("Unauthorized");
-  if (user.role === "employee" && user.id !== log.user_id)
-    throw new Error("Unauthorized");
-  if (!user.esignature) throw new Error("User esignature is required");
-
-  const establishment = await getEstablishmentAction(user);
-
-  if (!establishment) throw new Error("Unauthorized");
-
-  const db = await getDb();
-  const redis = await getClient();
-
   try {
+    const user = await getUserAction();
+
+    if (!user) throw new Error("Unauthorized");
+    if (user.role === "employee" && user.id !== log.user_id)
+      throw new Error("Unauthorized");
+    if (!user.esignature) throw new Error("User esignature is required");
+
+    const establishment = await getEstablishmentAction(user);
+
+    if (!establishment) throw new Error("Unauthorized");
+
+    const db = await getDb();
+    const redis = await getClient();
+
     // Create the cleaning log
     const createdLogs = await db
       .insert(logsTable)
@@ -186,7 +186,7 @@ export async function createLogAction(log: {
 
     return createdLogs[0];
   } catch (e) {
-    console.log(e);
+    console.log(`[Error]: ${e}`);
     return undefined;
   }
 }

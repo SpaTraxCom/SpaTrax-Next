@@ -14,10 +14,15 @@ export async function getEstablishmentAction(
 ): Promise<InferSelectModel<typeof establishmentsTable> | undefined> {
   let user = preUser;
 
-  if (!user) user = await getUserAction();
-  if (!user) throw new Error("You must be logged in to perform this action.");
-  if (!user.establishment_id)
-    throw new Error("You are not associated with an establishment.");
+  try {
+    if (!user) user = await getUserAction();
+    if (!user) throw new Error("You must be logged in to perform this action.");
+    if (!user.establishment_id)
+      throw new Error("You are not associated with an establishment.");
+  } catch (e) {
+    console.log(`[Error]: ${e}`);
+    return;
+  }
 
   const db = await getDb();
   const redis = await getClient();
@@ -45,7 +50,7 @@ export async function getEstablishmentAction(
     return establishments[0];
   } catch (e) {
     console.log(e);
-    return undefined;
+    return;
   }
 }
 
@@ -128,46 +133,51 @@ export async function editEstablishmentAction(establishment: {
   chairs: number;
   presets: string[];
 }) {
-  const db = await getDb();
-  const redis = await getClient();
+  try {
+    const db = await getDb();
+    const redis = await getClient();
 
-  // Make sure user is admin of establishment
-  const { userId } = await auth();
-  if (!userId) throw new Error("You must be logged in to perform this action.");
+    // Make sure user is admin of establishment
+    const { userId } = await auth();
+    if (!userId)
+      throw new Error("You must be logged in to perform this action.");
 
-  const users = await db
-    .select()
-    .from(usersTable)
-    .where(eq(usersTable.clerk_id, userId));
+    const users = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.clerk_id, userId));
 
-  if (
-    users[0].role !== "admin" ||
-    users[0].establishment_id !== establishment.id
-  )
-    throw new Error("Unauthorized");
+    if (
+      users[0].role !== "admin" ||
+      users[0].establishment_id !== establishment.id
+    )
+      throw new Error("Unauthorized");
 
-  // TODO: Establishment Field Validation
+    // TODO: Establishment Field Validation
 
-  const updatedEstablishment = await db
-    .update(establishmentsTable)
-    .set({
-      business_name: establishment.name,
-      address: establishment.address,
-      city: establishment.city,
-      state: establishment.state,
-      postal: establishment.postal,
-      country: establishment.country,
-      chairs: establishment.chairs,
-      presets: establishment.presets,
-    })
-    .where(eq(establishmentsTable.id, establishment.id))
-    .returning();
+    const updatedEstablishment = await db
+      .update(establishmentsTable)
+      .set({
+        business_name: establishment.name,
+        address: establishment.address,
+        city: establishment.city,
+        state: establishment.state,
+        postal: establishment.postal,
+        country: establishment.country,
+        chairs: establishment.chairs,
+        presets: establishment.presets,
+      })
+      .where(eq(establishmentsTable.id, establishment.id))
+      .returning();
 
-  // Update in Redis
-  redis.set(
-    `establishments:${updatedEstablishment[0].id}`,
-    JSON.stringify(updatedEstablishment[0])
-  );
+    // Update in Redis
+    redis.set(
+      `establishments:${updatedEstablishment[0].id}`,
+      JSON.stringify(updatedEstablishment[0])
+    );
 
-  return updatedEstablishment;
+    return updatedEstablishment;
+  } catch (e) {
+    console.log(`[Error]: ${e}`);
+  }
 }

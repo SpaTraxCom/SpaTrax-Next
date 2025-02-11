@@ -38,7 +38,14 @@ const items = [
 ];
 
 export async function SidebarNavPrimary() {
-  const user = await getUserAction();
+  let user;
+
+  try {
+    user = await getUserAction();
+  } catch (e) {
+    console.log(`[Error]: ${e}`);
+    return <h1>Error</h1>;
+  }
 
   if (!user || !user.role) return <h1>Unauthorized</h1>;
 
