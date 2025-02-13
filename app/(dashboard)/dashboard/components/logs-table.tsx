@@ -21,8 +21,6 @@ interface Props {
 }
 
 export function LogsTable(props: Props) {
-  // TODO: Allow non-employees to select "All Members" in tech dropdown
-
   return (
     <Table>
       <TableCaption>

@@ -95,7 +95,23 @@ export async function createTeamMemberAction(member: {
 
     if (preMembers.length) throw new Error("User with email already exists");
 
-    // TODO: Field Validation
+    // Field Validation
+    if (member.firstName.length < 2)
+      throw new Error("Member first name must be atleast 2 characters.");
+    if (member.firstName.length > 255)
+      throw new Error("Member first name must be less than 256 characters");
+    if (member.lastName.length < 2)
+      throw new Error("Member last name must be atleast 2 characters.");
+    if (member.lastName.length > 255)
+      throw new Error("Member last name must be less than 256 characters");
+    if (member.email.length < 2)
+      throw new Error("Member email must be atleast 2 characters.");
+    if (member.email.length > 255)
+      throw new Error("Member email must be less than 256 characters");
+    if (member.role !== "employee" && member.role !== "manager")
+      throw new Error("Invalid role value");
+    if (member.chair && typeof member.chair !== "number")
+      throw new Error("Invalid chair value");
 
     const createdMembers = await db
       .insert(usersTable)

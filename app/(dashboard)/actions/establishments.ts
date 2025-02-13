@@ -81,7 +81,35 @@ export async function createEstablishmentAction(establishment: {
     if (users[0].establishment_id)
       throw new Error("Already a part of an establishment.");
 
-    // TODO: Establishment Field Validation
+    // Field Validation
+    if (establishment.name.length < 2)
+      throw new Error("Establishment name must be atleast 2 characters.");
+    if (establishment.name.length > 255)
+      throw new Error("Establishment name must be less than 256 characters");
+    if (establishment.address.length > 2)
+      throw new Error("Establishment address must be atleast 2 characters.");
+    if (establishment.address.length < 255)
+      throw new Error("Establishment address must be less than 256 characters");
+    if (establishment.city.length < 2)
+      throw new Error("Establishment city must be atleast 2 characters.");
+    if (establishment.city.length > 255)
+      throw new Error("Establishment city must be less than 256 characters");
+    if (establishment.state.length < 2)
+      throw new Error("Establishment state must be atleast 2 characters.");
+    if (establishment.state.length > 255)
+      throw new Error("Establishment state must be less than 256 characters");
+    if (establishment.postal.length < 2)
+      throw new Error("Establishment postal must be atleast 2 characters.");
+    if (establishment.postal.length > 255)
+      throw new Error("Establishment postal must be less than 256 characters");
+    if (establishment.country.length < 2)
+      throw new Error("Establishment country must be atleast 2 characters.");
+    if (establishment.country.length > 255)
+      throw new Error("Establishment country must be less than 256 characters");
+    if (establishment.chairs < 1)
+      throw new Error("Establishment chairs must be atleast 1.");
+    if (establishment.chairs > 10000)
+      throw new Error("Establishment chairs must be less than 10000.");
 
     // Create Establishment
     const createdEstablishment = await db
@@ -153,7 +181,35 @@ export async function editEstablishmentAction(establishment: {
     )
       throw new Error("Unauthorized");
 
-    // TODO: Establishment Field Validation
+    // Field Validation
+    if (establishment.name.length < 2)
+      throw new Error("Establishment name must be atleast 2 characters.");
+    if (establishment.name.length > 255)
+      throw new Error("Establishment name must be less than 256 characters");
+    if (establishment.address.length > 2)
+      throw new Error("Establishment address must be atleast 2 characters.");
+    if (establishment.address.length < 255)
+      throw new Error("Establishment address must be less than 256 characters");
+    if (establishment.city.length < 2)
+      throw new Error("Establishment city must be atleast 2 characters.");
+    if (establishment.city.length > 255)
+      throw new Error("Establishment city must be less than 256 characters");
+    if (establishment.state.length < 2)
+      throw new Error("Establishment state must be atleast 2 characters.");
+    if (establishment.state.length > 255)
+      throw new Error("Establishment state must be less than 256 characters");
+    if (establishment.postal.length < 2)
+      throw new Error("Establishment postal must be atleast 2 characters.");
+    if (establishment.postal.length > 255)
+      throw new Error("Establishment postal must be less than 256 characters");
+    if (establishment.country.length < 2)
+      throw new Error("Establishment country must be atleast 2 characters.");
+    if (establishment.country.length > 255)
+      throw new Error("Establishment country must be less than 256 characters");
+    if (establishment.chairs < 1)
+      throw new Error("Establishment chairs must be atleast 1.");
+    if (establishment.chairs > 10000)
+      throw new Error("Establishment chairs must be less than 10000.");
 
     const updatedEstablishment = await db
       .update(establishmentsTable)

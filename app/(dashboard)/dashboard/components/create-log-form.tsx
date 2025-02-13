@@ -274,23 +274,6 @@ export default function CreateLogForm(props: Props) {
               </FormItem>
             )}
           />
-          {/* Preset */}
-          {/* <FormField
-            control={form.control}
-            name="presets"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>4&#41; Presets</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  TODO: Make this a multi-select dropdown of presets
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
           <div>
             <FormLabel>4&#41; Presets</FormLabel>
             <div className="mt-2 space-y-2">
