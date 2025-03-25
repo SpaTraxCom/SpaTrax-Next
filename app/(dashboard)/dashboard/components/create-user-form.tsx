@@ -84,8 +84,13 @@ export default function CreateUserForm(props: Props) {
         chair: values.chair,
       });
 
-      // TODO: Error handling
-      if (!createdUser) return;
+      if (!createdUser) {
+        toast({
+          title: "Error adding team member",
+          variant: "destructive",
+        });
+        return;
+      }
 
       toast({
         title: "Team member added",

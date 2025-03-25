@@ -86,9 +86,9 @@ export async function createEstablishmentAction(establishment: {
       throw new Error("Establishment name must be atleast 2 characters.");
     if (establishment.name.length > 255)
       throw new Error("Establishment name must be less than 256 characters");
-    if (establishment.address.length > 2)
+    if (establishment.address.length < 2)
       throw new Error("Establishment address must be atleast 2 characters.");
-    if (establishment.address.length < 255)
+    if (establishment.address.length > 255)
       throw new Error("Establishment address must be less than 256 characters");
     if (establishment.city.length < 2)
       throw new Error("Establishment city must be atleast 2 characters.");
@@ -186,9 +186,9 @@ export async function editEstablishmentAction(establishment: {
       throw new Error("Establishment name must be atleast 2 characters.");
     if (establishment.name.length > 255)
       throw new Error("Establishment name must be less than 256 characters");
-    if (establishment.address.length > 2)
+    if (establishment.address.length < 2)
       throw new Error("Establishment address must be atleast 2 characters.");
-    if (establishment.address.length < 255)
+    if (establishment.address.length > 255)
       throw new Error("Establishment address must be less than 256 characters");
     if (establishment.city.length < 2)
       throw new Error("Establishment city must be atleast 2 characters.");
